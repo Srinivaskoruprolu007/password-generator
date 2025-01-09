@@ -8,7 +8,7 @@ function PasswordGenerator() {
   const [isCharacters, setIsCharacters] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
-  const [isCopied, setIsCopied] = useState(false);
+  const [, setIsCopied] = useState(false);
   const passwordRef = useRef(null);
   const generatePassword = useCallback(() => {
     let pass = "";
