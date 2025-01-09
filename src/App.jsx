@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
 function PasswordGenerator() {
   const [length, setLength] = useState(8);
   const [isNumbers, setIsNumbers] = useState(false);
   const [isCharacters, setIsCharacters] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
+  const passwordRef = useRef(null);
   const generatePassword = useCallback(() => {
     let pass = "";
     let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -22,6 +25,12 @@ function PasswordGenerator() {
     setPassword(pass);
   }, [length, isNumbers, isCharacters]);
 
+  const copyToClipboard = () => {
+    window.navigator.clipboard.writeText(password);
+    passwordRef.current?.select();
+    setIsCopied(true);
+    toast.success("Password Copied to Clipboard");
+  };
   useEffect(() => {
     generatePassword();
   }, [length, isNumbers, isCharacters, generatePassword]);
@@ -32,13 +41,14 @@ function PasswordGenerator() {
         <h1 className="text-4xl">Password Generator</h1>
       </div>
       {/* Password Input and button */}
-      <div className="flex bg-gray-800 shadow-md rounded-lg p-4 m-4">
+      <div className="flex bg-gray-800 justify-around shadow-md rounded-lg p-4 m-4">
         <input
           className="outline-none py-2 px-4 rounded-md "
           type={isPasswordVisible ? "text" : "password"}
           readOnly
           placeholder="Generate Password"
           value={password}
+          ref={passwordRef}
         />
         {isPasswordVisible ? (
           <FaRegEyeSlash
@@ -52,9 +62,23 @@ function PasswordGenerator() {
           />
         )}
 
-        <button className="bg-blue-500 w-full py-2 px-4 rounded-md text-white font-medium cursor-pointer">
+        <button
+          className="bg-blue-500 w-full py-2 px-4 rounded-md text-white font-medium cursor-pointer"
+          onClick={copyToClipboard}
+        >
           Copy
         </button>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
       {/* password customizations */}
       <div className="flex bg-gray-700 justify-between p-4 m-2 rounded-lg  gap-4 text-white">
