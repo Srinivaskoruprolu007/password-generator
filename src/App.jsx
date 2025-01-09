@@ -8,7 +8,7 @@ function PasswordGenerator() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
   const generatePassword = useCallback(() => {
-    let password = "";
+    let pass = "";
     let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     let numbers = "0123456789";
     let specialCharacters = "!@#$%^&*()_+";
@@ -16,12 +16,12 @@ function PasswordGenerator() {
     if (isNumbers) combined += numbers;
     if (isCharacters) combined += specialCharacters;
     for (let i = 0; i < length; i++) {
-      password += combined.charAt(Math.floor(Math.random() * combined.length));
+      let random = Math.floor(Math.random() * combined.length);
+      pass += combined.charAt(random);
     }
-    setPassword(password);
+    setPassword(pass);
   }, [length, isNumbers, isCharacters]);
 
-  
   useEffect(() => {
     generatePassword();
   }, [length, isNumbers, isCharacters, generatePassword]);
@@ -69,12 +69,18 @@ function PasswordGenerator() {
         </label>
 
         <label htmlFor="numbers" className="flex items-center gap-1">
-          <input type="checkbox" onClick={(prev) => setIsNumbers(!prev)} />
+          <input
+            type="checkbox"
+            onChange={() => setIsNumbers((prev) => !prev)}
+          />
           Numbers
         </label>
 
         <label htmlFor="characters" className="flex items-center gap-1">
-          <input type="checkbox" onClick={(prev) => setIsCharacters(!prev)} />
+          <input
+            type="checkbox"
+            onChange={() => setIsCharacters((prev) => !prev)}
+          />
           Characters
         </label>
       </div>
